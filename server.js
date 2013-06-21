@@ -111,8 +111,8 @@ function processPostData(data, filename, response) {
 
 function submitFaceDetectRequest(req, res) {
 
-	var imageUrl = 'http://' + image_loc;
-	
+    var imageUrl = 'http://' + image_loc;
+
     var url = 'http://api.skybiometry.com/fc/faces/detect.json?api_key='
     	+ api_key + '&api_secret=' + api_secret + '&urls=' + imageUrl;
 		
