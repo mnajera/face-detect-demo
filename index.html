@@ -3,11 +3,11 @@
 <head><title>HTML5 Webcam Face Detection Example</title></head>
 <body>
 <center>
-	<br><h3>HTML5 Webcam Face Detection Example</h3><br>
-	<video autoplay width="320" height="240" style="border:2px solid #000000;"></video>
-	<canvas width="320" height="240" style="border:2px solid #000000;"></canvas>
-	<br><br>
-	<button onclick="takePicture()">Take Picture</button>
+    <br><h3>HTML5 Webcam Face Detection Example</h3><br>
+    <video autoplay width="320" height="240" style="border:2px solid #000000;"></video>
+    <canvas width="320" height="240" style="border:2px solid #000000;"></canvas>
+    <br><br>
+    <button onclick="takePicture()">Take Picture</button>
     <br><br>
     <p id='statusText'>STATUS TEXT</p>
 </center>
@@ -18,39 +18,39 @@
     var canvas = document.querySelector('canvas');
     var ctx = canvas.getContext('2d');
     var localMediaStream = null;
-	
-	navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;   
-	window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
-		
-	navigator.getUserMedia({video:true}, function (stream) {
-			video.src = window.URL.createObjectURL(stream);
-			localMediaStream = stream;
-		}, function(error) {
-			console.log('getUserMedia error: ' + error);
-		});
-	
-	
+    
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;   
+    window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
+        
+    navigator.getUserMedia({video:true}, function (stream) {
+            video.src = window.URL.createObjectURL(stream);
+            localMediaStream = stream;
+        }, function(error) {
+            console.log('getUserMedia error: ' + error);
+        });
+    
+    
     function takePicture() {
         if (localMediaStream) {
             ctx.drawImage(video, 0, 0, 320, 240);
-			
-			var myform = new FormData();
-			myform.append("imageFile", canvas.toDataURL("image/png"));
-			
-			var req = new XMLHttpRequest();
-			req.open("POST", "http://localhost:8080/postImage");
+            
+            var myform = new FormData();
+            myform.append("imageFile", canvas.toDataURL("image/png"));
+            
+            var req = new XMLHttpRequest();
+            req.open("POST", "http://localhost:8080/postImage");
 
             req.onreadystatechange = function() {
                 if (req.readyState == 4) {
-                	document.getElementById('statusText').innerHTML = req.responseText;
+                    document.getElementById('statusText').innerHTML = req.responseText;
                     console.log(req.responseText);
                     setTimeout(doFaceDetection, 2000);
                 } else {
-	                document.getElementById('statusText').innerHTML = 'postImage error';
+                    document.getElementById('statusText').innerHTML = 'postImage error';
                 }
             };
-			
-			req.send(myform);
+            
+            req.send(myform);
         }
     }
 
@@ -62,38 +62,38 @@
                 document.getElementById('statusText').innerHTML = req.responseText;
                 var fdata = eval('(' + req.responseText + ')');
                 renderFaceBox(fdata);   
-			}
+            }
         };
         req.send(null);
     }
     
     function renderFaceBox(fdata) {
-		
-		/* face data format available at:
-		 * https://www.skybiometry.com/Documentation#tags/save
-		 */
-	
-		var w = fdata.photos[0].width;
-		var h = fdata.photos[0].height;
-	
-		var faceX = w * fdata.photos[0].tags[0].center.x / 100;
-		var faceY = h * fdata.photos[0].tags[0].center.y / 100;
-	
-		var faceAngle = fdata.photos[0].tags[0].yaw * (3.14 / 180);
-	
-		var faceW = w * fdata.photos[0].tags[0].width / 100;
-		var faceH = h * fdata.photos[0].tags[0].height / 100;
-	
-		ctx.save();
-		
-		ctx.lineWidth = 3;
-		ctx.strokeStyle = '#00ff00';
-		
-		ctx.translate(faceX, faceY);
-		ctx.rotate(faceAngle);
-		ctx.strokeRect(-faceW / 2, -faceH / 2, faceW, faceH);
-		ctx.restore();
-		
+        
+        /* face data format available at:
+         * https://www.skybiometry.com/Documentation#tags/save
+         */
+    
+        var w = fdata.photos[0].width;
+        var h = fdata.photos[0].height;
+    
+        var faceX = w * fdata.photos[0].tags[0].center.x / 100;
+        var faceY = h * fdata.photos[0].tags[0].center.y / 100;
+    
+        var faceAngle = fdata.photos[0].tags[0].yaw * (3.14 / 180);
+    
+        var faceW = w * fdata.photos[0].tags[0].width / 100;
+        var faceH = h * fdata.photos[0].tags[0].height / 100;
+    
+        ctx.save();
+        
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#00ff00';
+        
+        ctx.translate(faceX, faceY);
+        ctx.rotate(faceAngle);
+        ctx.strokeRect(-faceW / 2, -faceH / 2, faceW, faceH);
+        ctx.restore();
+        
     }
     
 </script>
