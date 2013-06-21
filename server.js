@@ -9,7 +9,7 @@ var fs = require('fs');
 var request = require('request');
 var Ftp = require('jsftp');
 
-var api_key = '__API_KEY__'
+var api_key = '__API_KEY__';
 var api_secret = '__API_SECRET__';
 var image_loc = '__IMAGE_LOC__';
 
@@ -59,7 +59,7 @@ function handlePostImage(req, res) {
             outdata += data;
         });
         req.on('end', function() {
-        	res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.writeHead(200, { 'Content-Type': 'text/html' });
             processPostData(outdata, 'test.png', res);
         });
     }
@@ -99,7 +99,7 @@ function processPostData(data, filename, response) {
                     } else {
                         console.log('file uploaded successfully!');
                     }	
-					response.end('uploaded the file');
+                    response.end('uploaded the file');
                 });
             });
 
